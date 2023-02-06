@@ -1,6 +1,8 @@
 #!/bin/python3
 
 
+import re
+
 def validate_html(html):
     '''
     This function performs a limited version of html validation by checking whether every opening tag has a corresponding closing tag.
@@ -10,6 +12,22 @@ def validate_html(html):
     >>> validate_html('<strong>example')
     False
     '''
+    stack = []
+    for tag in _extract_tags(html):
+        if '/' not in tag:
+            stack.append(tag)
+        else:
+            if len(stack) == 0:
+                return False
+
+            elif (tag.replace('/','') == stack[-1]):
+                stack.pop()
+
+    if len(stack) == 0:
+        return True
+
+    else:
+        return False
 
     # HINT:
     # use the _extract_tags function below to generate a list of html tags without any extra text;
@@ -29,3 +47,9 @@ def _extract_tags(html):
     >>> _extract_tags('Python <strong>rocks</strong>!')
     ['<strong>', '</strong>']
     '''
+    stack = []
+    tags = re.findall(r'<[^>]+>', html)
+    for tag in tags:
+        stack += [re.sub(r'(<\w+) [^>]+(>)', r'\1\2' , tag)]
+    return stack
+
