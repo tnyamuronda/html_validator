@@ -1,6 +1,4 @@
 #!/bin/python3
-
-
 import re
 
 
@@ -66,4 +64,4 @@ def _extract_tags(html):
     tags = re.findall(r'<[^>]+>', html)
     for tag in tags:
         stack += [re.sub(r'(<\w+) [^>]+(>)', r'\1\2', tag)]
-        return stack
+    return stack
